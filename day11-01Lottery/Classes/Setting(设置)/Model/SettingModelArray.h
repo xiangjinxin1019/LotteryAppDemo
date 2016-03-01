@@ -12,4 +12,8 @@
 
 @property (nonatomic,assign) Class destinationVC; // 跳转的目的控制器
 
++(instancetype)settingModelWithIcon:(NSString *)icon
+                              title:(NSString *)title
+                      destinationVC:(Class)destinationVC;
+
 @end

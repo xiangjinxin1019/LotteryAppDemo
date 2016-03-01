@@ -14,6 +14,7 @@
 
 @property (nonatomic,copy) NSString *title;
 
+@property (nonatomic,copy) void(^updateBlock)();
 
 +(instancetype) settingModelWithIcon:(NSString *)icon title:(NSString *)title;
 

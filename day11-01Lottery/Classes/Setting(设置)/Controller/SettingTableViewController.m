@@ -9,15 +9,12 @@
 #import "SettingTableViewController.h"
 
 #import "SettingModel.h"
-
 #import "SettingGroupModel.h"
-
 #import "SettingTableViewCell.h"
-
 #import "SettingModelArray.h"
 #import "SettingModelSwitch.h"
-
 #import "TestViewController.h"
+#import "MBProgressHUD+MJ.h"
 
 @interface SettingTableViewController ()
 
@@ -43,23 +40,91 @@
         _dataList = [NSMutableArray array];
         
         // 第0组
-        SettingModelArray *pushNotice = [SettingModelArray settingModelWithIcon:@"MoreMessage" title:@"推送和提醒"];
+        // “推送和提醒”
+        SettingModelArray *pushNotice = [SettingModelArray settingModelWithIcon:@"MoreMessage"
+                                                                          title:@"推送和提醒"
+                                                                  destinationVC:[TestViewController class]];
+        // “摇一摇机选”
+        SettingModel *yaoyiyao = [SettingModelSwitch settingModelWithIcon:@"handShake" title:@"摇一摇机选"];
         
-        pushNotice.destinationVC = [TestViewController class];
+        // “声音效果”
+        SettingModelArray *sound = [SettingModelArray settingModelWithIcon:@"sound_Effect"
+                                                                          title:@"声音效果"
+                                                                  destinationVC:[TestViewController class]];
         
-        SettingModel *yaoyiyao = [SettingModelSwitch settingModelWithIcon:@"handShake" title:@"摇一摇"];
         SettingGroupModel *group0 = [[SettingGroupModel alloc] init];
-        group0.items = @[pushNotice,yaoyiyao];
+        group0.items = @[pushNotice,yaoyiyao,sound];
         group0.header = @"这是header";
         group0.footer = @"这是footer";
         
         
         // 第一组
-        SettingModel *newVersion = [SettingModel settingModelWithIcon:@"MoreUpdate" title:@"检查新版本"];
-        SettingModel *help = [SettingModel settingModelWithIcon:@"MoreHelp" title:@"帮助"];
-        SettingGroupModel *group1 = [[SettingGroupModel alloc] init];
+        // “检查新版本”
+        SettingModel *newVersion = [SettingModelArray settingModelWithIcon:@"MoreUpdate"
+                                                                title:@"检查新版本"
+                                                        destinationVC:nil];
         
-        group1.items = @[newVersion,help];
+        newVersion.updateBlock = ^{
+            
+            // 1.添加蒙版
+            [MBProgressHUD showMessage:@"正在检查更新"];
+            
+            // 2.模拟网络延迟操作
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
+                // 3.取消蒙版
+                [MBProgressHUD hideHUD];
+                
+                // 4.弹窗提示
+                UIAlertController *alController = [UIAlertController alertControllerWithTitle:@"检查到新版本" message:@"是否更新？" preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *updateAction = [UIAlertAction actionWithTitle:@"立即更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"稍后提示" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                
+                [alController addAction:updateAction];
+                [alController addAction:cancelAction];
+                
+                [self presentViewController:alController animated:YES completion:^{
+                    
+                }];
+                
+                
+                
+            });
+        };
+        
+        // “帮助”
+        SettingModel *help = [SettingModelArray settingModelWithIcon:@"MoreHelp"
+                                                               title:@"帮助"
+                                                       destinationVC:[TestViewController class]];
+        
+        // “分享”
+        SettingModel *share = [SettingModelArray settingModelWithIcon:@"MoreShare"
+                                                               title:@"分享"
+                                                       destinationVC:[TestViewController class]];
+        
+        // “查看消息”
+        SettingModel *message = [SettingModelArray settingModelWithIcon:@"MoreMessage"
+                                                                title:@"查看消息"
+                                                        destinationVC:[TestViewController class]];
+        
+        // “产品推荐”
+        SettingModel *more = [SettingModelArray settingModelWithIcon:@"MoreNetease"
+                                                                  title:@"产品推荐"
+                                                          destinationVC:[TestViewController class]];
+        
+        // “关于”
+        SettingModel *about = [SettingModelArray settingModelWithIcon:@"MoreAbout"
+                                                                  title:@"关于"
+                                                          destinationVC:[TestViewController class]];
+        
+        SettingGroupModel *group1 = [[SettingGroupModel alloc] init];
+        group1.items = @[newVersion,help,share,message,more,about];
         group1.header = @"这是header";
         group1.footer = @"这是footer";
         
@@ -141,9 +206,21 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+    // 取消选中效果
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     // 得到模型
     SettingGroupModel *group = self.dataList[indexPath.section];
     SettingModel *model = group.items[indexPath.row];
+    
+    
+    // 判断是否是检查更新的操作
+    if (model.updateBlock) {
+        
+        model.updateBlock();  // 执行block中保存的块内容
+        
+    }
+    
     
     // 创建跳转控制器
     if ( [model isKindOfClass:[SettingModelArray class]] ) {
