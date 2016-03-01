@@ -13,8 +13,11 @@
 #import "SettingTableViewCell.h"
 #import "SettingModelArray.h"
 #import "SettingModelSwitch.h"
+#import "SettingModelProduct.h"
 #import "TestViewController.h"
 #import "MBProgressHUD+MJ.h"
+#import "ProductCollectionViewController.h"
+
 
 @interface SettingTableViewController ()
 
@@ -114,9 +117,9 @@
                                                         destinationVC:[TestViewController class]];
         
         // “产品推荐”
-        SettingModel *more = [SettingModelArray settingModelWithIcon:@"MoreNetease"
+        SettingModel *more = [SettingModelProduct settingModelWithIcon:@"MoreNetease"
                                                                   title:@"产品推荐"
-                                                          destinationVC:[TestViewController class]];
+                                                          destinationVC:[ProductCollectionViewController class]];
         
         // “关于”
         SettingModel *about = [SettingModelArray settingModelWithIcon:@"MoreAbout"
@@ -230,6 +233,18 @@
         UIViewController *vc = [[arrow.destinationVC alloc] init];
         
         [self.navigationController pushViewController:vc animated:YES];
+        
+    }
+    
+    else if ( [model isKindOfClass:[SettingModelProduct class]] ) {
+
+        // 跳转到CollectionViewController
+        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        
+        UICollectionViewController *collVC = [[UICollectionViewController alloc] initWithCollectionViewLayout:flowLayout];
+        
+        [self.navigationController pushViewController:collVC animated:YES];
+        
     }
     
 }

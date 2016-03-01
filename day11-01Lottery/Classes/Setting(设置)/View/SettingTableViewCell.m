@@ -12,6 +12,7 @@
 #import "SettingModelSwitch.h"
 
 #import "SettingModel.h"
+#import "SettingModelProduct.h"
 
 
 @interface SettingTableViewCell ()
@@ -74,7 +75,7 @@
 // 设置单元格AccessoryType
 -(void)settingCellAccessoryType
 {
-    if ( [_model isKindOfClass:[SettingModelArray class]] ) { // 箭头
+    if ( [_model isKindOfClass:[SettingModelArray class]] || [_model isKindOfClass:[SettingModelProduct class]] ) { // 箭头
         
         self.accessoryView = self.imgView;
         self.selectionStyle = UITableViewCellSelectionStyleDefault;
