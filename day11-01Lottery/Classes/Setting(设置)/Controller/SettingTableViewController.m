@@ -117,7 +117,7 @@
                                                         destinationVC:[TestViewController class]];
         
         // “产品推荐”
-        SettingModel *more = [SettingModelProduct settingModelWithIcon:@"MoreNetease"
+        SettingModel *more = [SettingModelArray settingModelWithIcon:@"MoreNetease"
                                                                   title:@"产品推荐"
                                                           destinationVC:[ProductCollectionViewController class]];
         
@@ -236,16 +236,16 @@
         
     }
     
-    else if ( [model isKindOfClass:[SettingModelProduct class]] ) {
-
-        // 跳转到CollectionViewController
-        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-        
-        UICollectionViewController *collVC = [[UICollectionViewController alloc] initWithCollectionViewLayout:flowLayout];
-        
-        [self.navigationController pushViewController:collVC animated:YES];
-        
-    }
+//    else if ( [model isKindOfClass:[SettingModelProduct class]] ) {
+//
+//        // 跳转到CollectionViewController
+//        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+//        
+//        UICollectionViewController *collVC = [[UICollectionViewController alloc] initWithCollectionViewLayout:flowLayout];
+//        
+//        [self.navigationController pushViewController:collVC animated:YES];
+//        
+//    }
     
 }
 
