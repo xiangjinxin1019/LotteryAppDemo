@@ -11,6 +11,8 @@
 #import "ProductCell.h"
 #import "ProductModel.h"
 
+
+
 @interface ProductCollectionViewController ()
 
 
@@ -34,12 +36,18 @@
     flowLayout.sectionInset = UIEdgeInsetsMake(20, 0, 0, 0);
     
     
+//    if (self = [super initWithCollectionViewLayout:flowLayout]) {
+//        
+//    }
+//
+//    return self;
+    
     return [super initWithCollectionViewLayout:flowLayout];
     
 }
 
 
-#pragma mark - 懒加载得到JSON数据：
+#pragma mark - 懒加载解析JSON数据：
 -(NSMutableArray *)products
 {
     
@@ -68,7 +76,9 @@
 
 
 
+
 #pragma mark - viewDidLoad方法：
+
 static NSString * const reuseIdentifier = @"Cell";
 
 - (void)viewDidLoad {
@@ -80,12 +90,10 @@ static NSString * const reuseIdentifier = @"Cell";
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
     
-
-    
-    // Register cell classes
     UINib *Nib = [UINib nibWithNibName:@"ProductCell" bundle:nil];
     
     [self.collectionView registerNib:Nib forCellWithReuseIdentifier:reuseIdentifier];
+ 
     
 }
 
@@ -118,11 +126,12 @@ static NSString * const reuseIdentifier = @"Cell";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
 
-    return 12;
+    return self.products.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+
     
     ProductCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     

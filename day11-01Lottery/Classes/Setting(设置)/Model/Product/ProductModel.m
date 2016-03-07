@@ -29,9 +29,20 @@
     proModel.icon = dict[@"icon"];
     proModel.customUrl = dict[@"customUrl"];
     
+    [proModel addObserver:proModel forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
+    
     return proModel;
 }
 
+
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+
+    
+    NSLog(@"new:%@",[change objectForKey:@"new"]);
+    
+}
 
 -(void)setIcon:(NSString *)icon
 {

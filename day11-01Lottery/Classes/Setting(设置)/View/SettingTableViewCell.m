@@ -14,12 +14,16 @@
 #import "SettingModel.h"
 #import "SettingModelProduct.h"
 
+#import "SettingModelLabel.h"
+
 
 @interface SettingTableViewCell ()
 
 @property (nonatomic, strong) UISwitch *switchView;
 
 @property (nonatomic, strong) UIImageView *imgView;
+
+@property (nonatomic,strong) UILabel *labelView;
 
 @end
 
@@ -52,6 +56,24 @@
     return _imgView;
 }
 
+
+#pragma mark - labelView懒加载:
+-(UILabel *)labelView
+{
+    
+    if (_labelView == nil) {
+        
+        _labelView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 44)];
+        
+        _labelView.textColor = [UIColor redColor];
+        
+        _labelView.textAlignment = NSTextAlignmentRight;
+        
+    }
+    
+    return _labelView;
+}
+
 #pragma mark - model的setter方法:
 -(void)setModel:(SettingModel *)model
 {
@@ -68,7 +90,13 @@
 // 设置数据
 -(void)settingData
 {
-    self.imageView.image = [UIImage imageNamed:_model.icon];
+    
+    if (_model.icon.length) {
+        
+        self.imageView.image = [UIImage imageNamed:_model.icon];
+        
+    }
+    
     self.textLabel.text = _model.title;
 }
 
@@ -84,6 +112,16 @@
         
         self.accessoryView = self.switchView;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+    } else if ([_model isKindOfClass:[SettingModelLabel class]]) {
+        
+        self.accessoryView = self.labelView;
+        
+        SettingModelLabel *labelModel = (SettingModelLabel *)_model;
+        
+        self.labelView.text = labelModel.text;
+        
+        self.selectionStyle = UITableViewCellSelectionStyleDefault;
+        
     } else {
         
         self.accessoryView = nil;
